@@ -156,8 +156,8 @@
         year: "2024",
         tone: "from-sky-200 via-blue-100 to-indigo-200",
         image: {
-          src: "/other-works/1.png",
-          alt: "Other Works cover 1",
+          src: "/other-works/ip-design-1.png",
+          alt: "IP Design work cover 1",
         },
       },
       {
@@ -166,8 +166,8 @@
         year: "2024",
         tone: "from-emerald-200 via-teal-100 to-cyan-200",
         image: {
-          src: "/other-works/2.png",
-          alt: "Other Works cover 2",
+          src: "/other-works/ip-design-2.png",
+          alt: "IP Design work cover 2",
         },
       },
       {
@@ -176,8 +176,8 @@
         year: "2023",
         tone: "from-violet-200 via-purple-100 to-blue-200",
         image: {
-          src: "/other-works/3.png",
-          alt: "Other Works cover 3",
+          src: "/other-works/ip-design-3.png",
+          alt: "IP Design work cover 3",
         },
       },
       {
@@ -186,8 +186,8 @@
         year: "2023",
         tone: "from-slate-200 via-blue-100 to-sky-200",
         image: {
-          src: "/other-works/4.png",
-          alt: "Other Works cover 4",
+          src: "/other-works/ip-design-4-v2.png",
+          alt: "IP Design work cover 4",
         },
       },
       {
@@ -196,8 +196,8 @@
         year: "2023",
         tone: "from-lime-200 via-emerald-100 to-teal-200",
         image: {
-          src: "/other-works/5.png",
-          alt: "Other Works cover 5",
+          src: "/other-works/ip-design-5.png",
+          alt: "IP Design work cover 5",
         },
       },
       {
@@ -206,8 +206,8 @@
         year: "2022",
         tone: "from-blue-200 via-indigo-100 to-violet-200",
         image: {
-          src: "/other-works/6.png",
-          alt: "Other Works cover 6",
+          src: "/other-works/ip-design-6.png",
+          alt: "IP Design work cover 6",
         },
       },
     ],

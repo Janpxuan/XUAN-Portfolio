@@ -166,8 +166,8 @@
         year: "2024",
         tone: "from-emerald-200 via-teal-100 to-cyan-200",
         image: {
-          src: "/other-works/3.png",
-          alt: "Other Works cover 3",
+          src: "/other-works/2.png",
+          alt: "Other Works cover 2",
         },
       },
       {
@@ -176,8 +176,8 @@
         year: "2023",
         tone: "from-violet-200 via-purple-100 to-blue-200",
         image: {
-          src: "/other-works/2.png",
-          alt: "Other Works cover 2",
+          src: "/other-works/3.png",
+          alt: "Other Works cover 3",
         },
       },
       {

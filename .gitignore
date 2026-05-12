@@ -1,0 +1,11 @@
+.next/
+node_modules/
+.npm-cache/
+
+devserver.out.log
+devserver.err.log
+
+*.tsbuildinfo
+
+.DS_Store
+Thumbs.db

@@ -143,8 +143,8 @@
     ],
   },
   otherWorks: {
-    title: "IP Design",
-    subtitle: "独眼萌物的小合集",
+    title: "Other Works",
+    subtitle: "一些关于探索的设计内容",
     action: {
       label: "View More",
       href: "#contact",

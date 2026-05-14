@@ -121,8 +121,16 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
 
           const page = await pdfDocument.getPage(pageNumber);
           const baseViewport = page.getViewport({ scale: 1 });
-          const viewport = page.getViewport({
-            scale: pageWidth / baseViewport.width,
+          const cssScale = pageWidth / baseViewport.width;
+          const outputScale =
+            typeof window !== "undefined"
+              ? Math.min(window.devicePixelRatio || 1, 2.5)
+              : 1;
+          const cssViewport = page.getViewport({
+            scale: cssScale,
+          });
+          const renderViewport = page.getViewport({
+            scale: cssScale * outputScale,
           });
           const canvas = canvasRefs.current[pageNumber];
           const context = canvas?.getContext("2d");
@@ -131,14 +139,14 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
             continue;
           }
 
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-          canvas.style.width = `${viewport.width}px`;
-          canvas.style.height = `${viewport.height}px`;
+          canvas.width = Math.floor(renderViewport.width);
+          canvas.height = Math.floor(renderViewport.height);
+          canvas.style.width = `${cssViewport.width}px`;
+          canvas.style.height = `${cssViewport.height}px`;
 
           const renderTask = page.render({
             canvasContext: context,
-            viewport,
+            viewport: renderViewport,
           });
           renderTasks.push(renderTask);
 

@@ -19,7 +19,9 @@ type PdfJsModule = {
   GlobalWorkerOptions: {
     workerSrc: string;
   };
-  getDocument: (src: string) => { promise: Promise<PdfDocumentProxy> };
+  getDocument: (src: { url: string; wasmUrl: string }) => {
+    promise: Promise<PdfDocumentProxy>;
+  };
 };
 
 type PdfCanvasPreviewProps = {
@@ -74,7 +76,10 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
 
         pdfjs.GlobalWorkerOptions.workerSrc = "/vendor/pdfjs/pdf.worker.min.mjs";
 
-        const pdfDocument = await pdfjs.getDocument(src).promise;
+        const pdfDocument = await pdfjs.getDocument({
+          url: src,
+          wasmUrl: "/vendor/pdfjs/wasm/",
+        }).promise;
 
         if (cancelled) {
           return;

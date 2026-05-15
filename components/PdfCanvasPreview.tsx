@@ -30,6 +30,7 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRefs = useRef<Record<number, HTMLCanvasElement | null>>({});
   const pdfDocumentRef = useRef<PdfDocumentProxy | null>(null);
+  const renderRunIdRef = useRef(0);
   const [pageCount, setPageCount] = useState(0);
   const [pageWidth, setPageWidth] = useState(0);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -65,6 +66,9 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
     async function loadPdf() {
       try {
         setStatus("loading");
+        setErrorMessage("PDF preview failed to load.");
+        setPageCount(0);
+        pdfDocumentRef.current = null;
 
         const runtimeImport = new Function(
           "src",
@@ -102,6 +106,8 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
 
   useEffect(() => {
     let cancelled = false;
+    const renderRunId = renderRunIdRef.current + 1;
+    renderRunIdRef.current = renderRunId;
     const renderTasks: Array<{ promise: Promise<void>; cancel: () => void }> = [];
 
     async function renderPages() {
@@ -132,20 +138,25 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
           const renderViewport = page.getViewport({
             scale: cssScale * outputScale,
           });
-          const canvas = canvasRefs.current[pageNumber];
-          const context = canvas?.getContext("2d");
+          const displayCanvas = canvasRefs.current[pageNumber];
+          const displayContext = displayCanvas?.getContext("2d");
 
-          if (!canvas || !context) {
+          if (!displayCanvas || !displayContext) {
             continue;
           }
 
-          canvas.width = Math.floor(renderViewport.width);
-          canvas.height = Math.floor(renderViewport.height);
-          canvas.style.width = `${cssViewport.width}px`;
-          canvas.style.height = `${cssViewport.height}px`;
+          const renderCanvas = document.createElement("canvas");
+          const renderContext = renderCanvas.getContext("2d");
+
+          if (!renderContext) {
+            continue;
+          }
+
+          renderCanvas.width = Math.floor(renderViewport.width);
+          renderCanvas.height = Math.floor(renderViewport.height);
 
           const renderTask = page.render({
-            canvasContext: context,
+            canvasContext: renderContext,
             viewport: renderViewport,
           });
           renderTasks.push(renderTask);
@@ -157,14 +168,25 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
 
             throw error;
           });
+
+          if (cancelled || renderRunIdRef.current !== renderRunId) {
+            return;
+          }
+
+          displayCanvas.width = renderCanvas.width;
+          displayCanvas.height = renderCanvas.height;
+          displayCanvas.style.width = `${cssViewport.width}px`;
+          displayCanvas.style.height = `${cssViewport.height}px`;
+          displayContext.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
+          displayContext.drawImage(renderCanvas, 0, 0);
         }
 
-        if (!cancelled) {
+        if (!cancelled && renderRunIdRef.current === renderRunId) {
           setStatus("ready");
         }
       } catch (error) {
         console.error("PDF render failed", error);
-        if (!cancelled) {
+        if (!cancelled && renderRunIdRef.current === renderRunId) {
           setErrorMessage(
             error instanceof Error ? error.message : "PDF preview failed to load.",
           );
@@ -177,6 +199,7 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
 
     return () => {
       cancelled = true;
+      renderRunIdRef.current += 1;
       renderTasks.forEach((task) => task.cancel());
     };
   }, [pageCount, pageWidth, src]);

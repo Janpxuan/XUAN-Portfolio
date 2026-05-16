@@ -107,7 +107,7 @@ export function FeaturedProjects() {
                 exit={{ opacity: 0, y: 10, scale: 0.985 }}
                 transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                 className="relative mx-auto w-[calc(100%-2.5rem)] max-w-6xl sm:w-[calc(100%-3.5rem)] lg:w-[calc(100%-4rem)]"
-                style={{ height: "70dvh" }}
+                style={{ height: "85dvh" }}
               >
                 <button
                   type="button"

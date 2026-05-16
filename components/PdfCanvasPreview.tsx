@@ -36,6 +36,7 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
   const [pageWidth, setPageWidth] = useState(0);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [errorMessage, setErrorMessage] = useState("PDF preview failed to load.");
+  const renderBoost = 1.35;
 
   useEffect(() => {
     const node = containerRef.current;
@@ -129,7 +130,7 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
           const cssScale = pageWidth / baseViewport.width;
           const outputScale =
             typeof window !== "undefined"
-              ? Math.min(window.devicePixelRatio || 1, 2.5)
+              ? Math.min((window.devicePixelRatio || 1) * renderBoost, 4)
               : 1;
           const cssViewport = page.getViewport({
             scale: cssScale,
@@ -148,6 +149,8 @@ export function PdfCanvasPreview({ src }: PdfCanvasPreviewProps) {
           canvas.height = Math.floor(renderViewport.height);
           canvas.style.width = `${cssViewport.width}px`;
           canvas.style.height = `${cssViewport.height}px`;
+          context.imageSmoothingEnabled = true;
+          context.imageSmoothingQuality = "high";
 
           const renderTask = page.render({
             canvasContext: context,
